@@ -2,7 +2,7 @@
     "name": "igorgoroshit/ppm",
     "description": "Composer NPM Plugin",
     "type": "composer-plugin",
-    
+    "version": "0.1.0",
     "autoload": {
         "psr-4": {
             "Igorgoroshit\\Ppm\\": "src/"
