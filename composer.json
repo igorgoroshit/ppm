@@ -1,0 +1,46 @@
+{
+    "name": "igorgoroshit/ppm",
+    "description": "Composer NPM Plugin",
+    "type": "composer-plugin",
+    
+    "autoload": {
+        "psr-4": {
+            "Igorgoroshit\\Ppm\\": "src/"
+        }
+    },
+
+    "authors": [
+        {
+            "name": "François Pluchino",
+            "email": "francois.pluchino@gmail.com"
+        },
+        {
+            "name": "Simon Karlen",
+            "email": "simi.albi@outlook.com"
+        },
+        {
+            "name": "Igor Goroshit",
+            "email": "igor@webt.co.il"
+        }
+    ],
+
+    "require": {
+        "php": ">=7.2",
+        "composer-plugin-api": "^2.0"
+    },
+
+    "require-dev": {
+        "composer/composer": "^2.0"
+    },
+
+    "extra": {
+        "ppm": {
+            "enabled": true
+        },
+        "class": "Igorgoroshit\\Ppm\\Plugin",
+        "plugin-modifies-downloads": true,
+        "branch-alias": {
+            "dev-master": "master"
+        }
+    }
+}
