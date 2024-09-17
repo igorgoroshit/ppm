@@ -28,6 +28,10 @@ use Composer\Semver\Constraint\Constraint;
 use Composer\Semver\Constraint\ConstraintInterface;
 use Composer\Util\HttpDownloader;
 use Composer\Util\Url;
+use ErrorException;
+use InvalidArgumentException;
+use UnexpectedValueException;
+
 
 class NpmRepository implements ConfigurableRepositoryInterface, RepositoryInterface
 {
@@ -44,9 +48,9 @@ class NpmRepository implements ConfigurableRepositoryInterface, RepositoryInterf
     protected Cache $cache;
 
 
-    protected string      $url         = 'https://registry.npmjs.org';
-    protected string|null $lazyLoadUrl = 'https://registry.npmjs.org/%package%';
-    protected string|null $searchUrl   = 'https://www.npmjs.com/search/suggestions?q=%query%';
+    protected string $url         = 'https://registry.npmjs.org';
+    protected string $lazyLoadUrl = 'https://registry.npmjs.org/%package%';
+    protected string $searchUrl   = 'https://www.npmjs.com/search/suggestions?q=%query%';
 
 
     public function __construct(array $repoConfig, PartialComposer $composer, IOInterface $io, Config $config, HttpDownloader $httpDownloader, ?EventDispatcher $eventDispatcher)
@@ -233,7 +237,11 @@ class NpmRepository implements ConfigurableRepositoryInterface, RepositoryInterf
                         $packages[] = $package;
                     }
                 }
-            } catch (\ErrorException|\Seld\JsonLint\ParsingException|\InvalidArgumentException) {
+            } catch (ErrorException $e) {
+                continue;
+            } catch (\Seld\JsonLint\ParsingExceptio $e) {
+                continue;
+            } catch (InvalidArgumentException $e) {
                 continue;
             }
         }
@@ -316,7 +324,7 @@ class NpmRepository implements ConfigurableRepositoryInterface, RepositoryInterf
         foreach ($item['versions'] as $version => $data) {
             try {
                 $v = $versionParser->normalize($version);
-            } catch (\UnexpectedValueException) {
+            } catch (UnexpectedValueException $e) {
                 continue;
             }
             $results[] = [
@@ -349,7 +357,7 @@ class NpmRepository implements ConfigurableRepositoryInterface, RepositoryInterf
     final protected function fetchFileIfLastModified(
         string $filename,
         string $cacheKey,
-        string $lastModifiedTime): bool|array
+        string $lastModifiedTime)
     {
         try {
             $options = $this->options;
@@ -436,7 +444,7 @@ class NpmRepository implements ConfigurableRepositoryInterface, RepositoryInterf
         string $filename,
         ?string $cacheKey = null,
         bool $storeLastModifiedTime = false
-    ): mixed
+    )
     {
         if (null === $cacheKey) {
             $cacheKey = $filename;
